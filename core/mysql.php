@@ -114,7 +114,6 @@ function delete(string $entidade, array $criterio = []): bool {
     return $retorno;
 }
 
-
 function atualiza(string $entidade, array $dados, array $criterio = []): bool {
     $retorno = false;
 
