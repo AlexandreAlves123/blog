@@ -26,6 +26,7 @@ function update(string $entidade, array $dados, array $criterio = []): string {
 
     return $instrucao;
 }
+
 function delete(string $entidade, array $criterio = []) : string {
     $instrucao = "DELETE {$entidade}";
 

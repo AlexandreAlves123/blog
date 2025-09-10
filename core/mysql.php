@@ -3,6 +3,8 @@ function insere(string $entidade, array $dados) : bool
 {
     $retorno = false;
 
+    print_r($dados);
+    echo '<br>';
     foreach ($dados as $campo => $dado){
         $coringa[$campo] = '?';
         $tipo[] = gettype($dado)[0];
@@ -10,12 +12,16 @@ function insere(string $entidade, array $dados) : bool
     }
 
     $instrucao = insert($entidade, $coringa);
-
+    echo $instrucao;
+    echo '<br>';
+    print_r(array_keys($dados));
+    echo '<br>';
+    echo implode(', $', array_keys($dados));
+    echo '<br>';
     $conexao = conecta();
 
-    $stmt = mysqli_prepare($conexao, $instrucao);
-
-    eval('mysqli_stmt_bind_param($stmt, \'' . implode('', $tipo) . '\',' . implode(', $', array_keys($dados)) . ');');
+    $stmt = mysqli_prepare($conexao, $instrucao);    
+    eval('mysqli_stmt_bind_param($stmt, \'' . implode('', $tipo) . '\',$' . implode(', $', array_keys($dados)) . ');');
 
     mysqli_stmt_execute($stmt);
 
@@ -77,7 +83,7 @@ function buscar(string $entidade, array $campos = ['*'], array $criterio = [], s
 }
 
 
-function delete(string $entidade, array $criterio = []): bool {
+function deleta(string $entidade, array $criterio = []): bool {
     $retorno = false;
     $coringa_criterio = [];
 
