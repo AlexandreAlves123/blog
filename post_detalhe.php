@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<html>
-<head>
     <?php
         require_once 'includes/funcoes.php';
         require_once 'core/conexao_mysql.php';
@@ -12,15 +10,16 @@
         }
 
         $posts = buscar(
-            'post',
-            'post',
+            'post',     
             [
                 'titulo',
                 'data_postagem',
                 'texto',
                 '(select nome from usuario where usuario.id = post.usuario_id) as nome'
             ],
-            'id = ' . $post['id']
+            
+               [ ['id', '=' , $post]]
+            
         );
 
         $post = $posts[0];
