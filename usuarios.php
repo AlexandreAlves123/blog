@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Usuários | Projeto para Web com PHP</title>
-    <link rel="stylesheet" href="lib/bootstrap-4.2.1-dist/css/bootstrap.min.css">
+    <head>
+        <title>Usuários | Projeto para Web com PHP</title>
+        <link rel="stylesheet" 
+        href="lib/bootstrap-4.2.1-dist/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php include 'includes/topo.php'; ?>
                 <?php
-                    include 'includes/valida_login.php';
+                 include 'includes/topo.php'; 
+                 include 'includes/valida_login.php';
                     if ($_SESSION['login']['usuario']['adm'] !== 1) {
                         header('Location: index.php');
                     }
@@ -39,48 +40,52 @@
                 $criterio = [];
 
                 if (!empty($busca)) {
-                    $criterio = [
-                        'nome' => ['like', '%'.$busca.'%']
-                    ];
+                    $criterio[] = ['nome', 'like', "%{$busca}%"];       
                 }
 
                 $result = buscar(
-                    'usuario',
                     'usuario',
                     [
                         'id',
                         'nome',
                         'email',
-                        'adm',
+                        'data_criacao',      
                         'ativo',
-                        'data_criacao DESC, nome ASC'
+                        'adm',
                     ],
-                    $criterio
+                    $criterio,
+                    'data_criacao DESC, nome ASC'   
                 );
+
             ?>
-            <table class="table table-bordered table-hover table-striped">
+            <table class="table table-bordered table-hover table-striped
+                            table-responsive{-sm |-md |-lg |-xl">
                 <thead>
                     <tr>
                         <td>Nome</td>
                         <td>E-mail</td>
+                        <td>Data cadastro</td>
                         <td>Ativo</td>
                         <td>Administrador</td>
-                        <td></td>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($result as $entidade) { ?>
-                        <tr>
+                    <?php
+                        foreach ($result as $entidade): 
+                            $data = date_create($entidade['data_criacao']);
+                            $data = date_format($data, 'd/m/Y H:i:s') 
+                        ?> 
+                        <tr>    
                             <td><?php echo $entidade['nome'] ?></td>
                             <td><?php echo $entidade['email'] ?></td>
-                            <td><?php echo ($entidade['ativo'] == 1) ? 'Sim' : 'Não' ?></td>
-                            <td><?php echo ($entidade['adm'] == 1) ? 'Sim' : 'Não' ?></td>
-                            <td>
-                                <a href="usuario_formulario.php?id=<?php echo $entidade['id'] ?>" class="btn btn-info">Atualizar</a>
+                            <td><?php echo $data?></td>
+                            <td><a href='core/usuario_repositorio.php?acao=status&id=<?php echo $entidade['id']?>
+                            &valor=<?php echo !$entidade['adm']?>'><?php echo ($entidade['adm']==1) ?
+                            'Desativar' : 'Ativar'; ?> </a></td>
+                            <td><a href='core/usuario_repositorio.php?acao=status$id=<?php echo $entidade['id'] ?>&valor=<?php echo !$entidade['adm']?>'><?php echo ($entidade['adm']==1)? 'Rebaixar' : "Promover"; ?> </a></td>    
                                 <a href="core/usuario_repositorio.php?acao=delete&id=<?php echo $entidade['id'] ?>" class="btn btn-danger">Excluir</a>
-                            </td>
                         </tr>
-                    <?php } ?>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -88,6 +93,7 @@
     <div class="row">
         <div class="col-md-12">
             <?php include 'includes/rodape.php'; ?>
+            </div>
         </div>
     </div>
     <script src="lib/bootstrap-4.2.1-dist/js/bootstrap.min.js"></script>

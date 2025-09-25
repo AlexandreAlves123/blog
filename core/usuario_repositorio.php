@@ -5,7 +5,7 @@ require_once '../core/conexao_mysql.php';
 require_once '../core/sql.php';
 require_once '../core/mysql.php';
 
-$salt = 'exemplosaltifsp';
+$salt = '558';
 
 foreach($_POST as $indice => $dado){
     $$indice = limparDados($dado);
