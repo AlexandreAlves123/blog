@@ -27,17 +27,12 @@
                     $id = (int)$_SESSION['login']['usuario']['id'];
 
                     $criterio = [
-                        'id' => $id
+                        ['id', '=', $id]
                     ];
 
                     $retorno = buscar(
                         'usuario',
-                        'usuario',
-                        [
-                            'id',
-                            'nome',
-                            'email'
-                        ],
+                        ['id','nome','email'],
                         $criterio
                     );
 
@@ -62,8 +57,6 @@
                         <input type="password" class="form-control" id="senha" name="senha">
                     </div>
                     <div class="form-group">
-                        <label for="confirmar_senha">Confirmar Senha</label>
-                        <input type="password" class="form-control" id="confirmar_senha" name="confirmar_senha">
                     </div>
                 <?php } ?>
                 <div class="text-right">
